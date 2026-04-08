@@ -5,19 +5,12 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Ideas;
 use App\Models\Post;
 
-Route::view('/', 'welcome', [
-    'greeting' => 'Hello, World!',
-    'name' => 'John Doe',
-    'age' => 30,
-    'tasks' => [
-        'Learn Laravel',
-        'Build a project',
-        'Deploy to production',
-    ],
-]);
-
+Route::view('/', 'welcome');
 Route::view('/about', 'about');
 Route::view('/contact', 'contact');
+Route::view('/services', 'services');
+Route::view('/showcases', 'showcases');
+Route::view('/blog', 'blog');
 
 Route::get('/formtest', function(){
     $posts = Post::all();
