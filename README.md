@@ -56,283 +56,72 @@ http://127.0.0.1:8000
 
 ---
 
-## Activity 1: Simple Navigation
+---
 
-Your task is to build a very simple navigation system using Laravel.
+## Comprehensive Project: The User Management Portal
+
+This project combines **Navigation**, **Form Handling (Session/Validation)**, and **Database CRUD** into one continuous development workflow.
 
 ### Objective
-
-Create a navbar with three links:
-
-* Home
-* About
-* Contact
-* Services
-* Showcases
-* Blog
-
-Each link should display a simple message when clicked.
-
-### Expected Output
-
-* Home → "Welcome to homepage"
-* About → "About us section"
-* Contact → "Contact page"
-* Services → "Services page"
-* Showcases → "Showcases page"
-* Blog → "Blog page"
-
-### Steps
-
-1. Create a navbar component inside:
-
-```
-resources/views/components/navbar.blade.php
-```
-
-Add:
-
-```blade
-<nav>
-    <a href="/">Home</a> |
-    <a href="/about">About</a> |
-    <a href="/contact">Contact</a> |
-    <a href="/services">Services</a> |
-    <a href="/showcases">Showcases</a> |
-    <a href="/blog">Blog</a> 
-</nav>
-<hr>
-```
-
-2. Use the navbar in your layout:
-
-```blade
-<x-navbar />
-{{ $slot }}
-```
-
-3. Make sure your routes are defined in `routes/web.php`:
-
-```php
-Route::get('/', function () {
-    return view('welcome');
-}); or Route::view('/', 'welcome');
-
-##both routes above works but view works only for static webpages.
-
-Route::get('/about', function () {
-    return view('about');
-});
-
-Route::get('/contact', function () {
-    return view('contact');
-});
-
-
-...
-```
-
-4. Update each page:
-
-**welcome.blade.php**
-
-```blade
-<x-layout>
-    <h1>Welcome to homepage</h1>
-</x-layout>
-```
-
-**about.blade.php**
-
-```blade
-<x-layout>
-    <h1>About us section</h1>
-</x-layout>
-```
-
-**contact.blade.php**
-
-```blade
-<x-layout>
-    <h1>Contact page</h1>
-</x-layout>
-```
-
-```
-...
-```
----
-
-# Activity 2: Forms in Laravel
-
-## Objective
-In this activity, you will practice handling **forms, POST requests, and session data** in Laravel.
-
-By the end of this activity, you should be able to:
-- Create a form using Blade
-- Handle form submissions using routes
-- Store data in session
-- Display stored data dynamically
+Build a complete web application where users can navigate between pages, register with detailed information, and manage that data in a database.
 
 ---
 
-## Given Code Overview
+### Phase 1: Layout & Navigation (Foundation)
+*Goal: Build a responsive frame for your application.*
 
-You are provided with:
-- A route that handles GET and POST requests
-- A Blade form view that submits email input
-
----
-
-## Tasks
-
-### Task 1: Understand the Flow
-Trace how the form works:
-1. User enters email
-2. Form submits via POST
-3. Email is stored in session
-4. Page reloads and displays saved emails
-
-Write a short explanation (3–5 sentences) of this flow.
+1. **Navbar Component**: Create `resources/views/components/navbar.blade.php`.
+   - Add links for: `Home`, `About`, `Contact`, `Services`, `Showcases`, `Blog`, and `Dashboard`.
+2. **Master Layout**: Create `resources/views/components/layout.blade.php` and use `<x-navbar />` inside it.
+3. **Static Routes**: Define GET routes in `routes/web.php` for each page.
+   - Home → "Welcome to homepage"
+   - About → "About us section"
+   - ...and so on.
 
 ---
 
-### Task 2: Add Validation
-Modify the POST route to:
-- Reject empty input
-- Reject invalid email format
+### Phase 2: Form Handling & Validation
+*Goal: Practice secure data collection and user feedback.*
 
-Hint:
-Use `request()->validate([...])`
-
----
-
-### Task 3: Prevent Duplicate Emails
-Update the logic so:
-- The same email cannot be added twice
-
-Hint:
-Check the session array before pushing.
+1. **Registration View**: Create `user_registration.blade.php`.
+2. **Form Elements**: Build a form that collects:
+   - First Name, Last Name, Email, Age, etc.
+3. **POST Route**: Create a route to handle the form submission.
+4. **Validation Logic**: Use `request()->validate([...])` to:
+   - Reject empty inputs.
+   - Ensure the email is in a valid format.
+   - Prevent duplicate emails (check the database).
+5. **Flash Messages**: Use Laravel Sessions to show a "Success" message after submission.
 
 ---
 
-### Task 4: Add Delete Button Per Email
-Instead of deleting all emails:
-- Add a **Delete button beside each email**
-- Remove only the selected email
+### Phase 3: Database CRUD operations
+*Goal: Move from temporary storage to persistent database storage.*
 
-Challenge:
-You will need to:
-- Pass index or value
-- Create a new POST/DELETE route
-
----
-
-### Task 5: Improve UI Feedback
-Add:
-- Success message after adding email
-- Error message if validation fails
-
-Hint:
-Use session flash messages
-
----
-
-### Task 6: Limit Entries
-- Allow only **5 emails maximum**
-- Show a warning if limit is reached
+1. **Migration**: Update the `users` table migration:
+   - Add: `first_name`, `last_name`, `middle_name`, `nickname`, `email` (unique), `age`, `address`, `contact_number`.
+   - Run `php artisan migrate`.
+2. **Store**: Inside your controller/route logic, save the validated data to the `User` model.
+3. **Display (Read)**: Create a table view that lists every user currently in the database.
+4. **Delete**: Add a delete button for each user row.
+5. **Update**: Create an "Edit" form that allows you to change existing user details.
 
 ---
 
 ## Reflection Questions
 
-Answer the following:
+1. What is the difference between GET and POST requests?
+2. Why is `@csrf` mandatory in Laravel forms?
+3. How does the `User` model bridge the gap between your code and the database?
+4. What happens to the user data if you run `php artisan migrate:refresh`?
 
-1. What is the difference between GET and POST?
-2. Why do we use `@csrf` in forms?
-3. What is session used for in this activity?
-4. What happens if session is cleared?
 ---
+
 ## Submission Instructions
-1. For the reflection answers, put your answers in a .md file.
-2. In the root directory, create a new file and name it Surname_Answers.md
-3. You may install readme-preview vscode extension so you may see the preview of the markdown file.
-4. Have fun this Holy Work.
----
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-# Activity 3: User Registration (Database CRUD)
+1. Save your reflection answers in a file named `Surname_Answers.md` in the root directory.
+2. Ensure your `.env` is properly configured for your local database.
+3. Have fun building!
 
-## Objective
-
-Transition from **session storage** to **database storage** and understand how CRUD works using **routes and Blade only**.
-
----
-
-## Tasks
-
----
-
-### 1. Update the Migration
-
-Locate the users migration file and:
-
-* Add fields:
-
-  * first name
-  * last name
-  * middle name
-  * nickname
-  * email (should be unique)
-  * age
-  * address
-  * contact number
-
-Run migration after editing.
-
-### 2. Prepare the Model
-
-### 3. Create the Form
-Create a separate Blade view for user input, name it user_registration.blade.php
-
-### 4. Store Data 
-### 5. Display Data
-
-Show all users in a table.
-### 6. Delete Function
-
-Allow users to be removed.
-
-### 7. Update Function
-
-Enable editing of user data.
-
-
-## Tips
-
-* Focus on understanding the flow:
-  **Form → Route → Model → Database → View**
-* Use Laravel helpers
-* Errors are part of the process, debug them
-
----
-Goal: Build it step-by-step. Don’t copy — understand.
 
 
 ## Notes for Students

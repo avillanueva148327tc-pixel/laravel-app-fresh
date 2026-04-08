@@ -1,77 +1,52 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-use App\Models\Ideas;
-use App\Models\Post;
 
-Route::view('/', 'welcome');
-Route::view('/about', 'about');
-Route::view('/contact', 'contact');
-Route::view('/services', 'services');
-Route::view('/showcases', 'showcases');
-Route::view('/blog', 'blog');
+// --- Phase 1: Navigation ---
+Route::view('/', 'welcome')->name('home');
+Route::view('/about', 'about')->name('about');
+Route::view('/contact', 'contact')->name('contact');
+Route::view('/services', 'services')->name('services');
+Route::view('/showcases', 'showcases')->name('showcases');
+Route::view('/blog', 'blog')->name('blog');
 
-Route::get('/formtest', function(){
-    $posts = Post::all();
+// --- Phase 2 & 3: User Registration & Management ---
+Route::get('/register', function () {
+    return view('user_registration');
+})->name('register');
 
-    return view('formtest',[
-        'posts' => $posts,
-    ]);
-});
-
-Route::post('/formtest', function(){
-    Post::create([
-        'description' => request('description'),
-    ]);
-
-    return redirect('/formtest');
-});
-
-Route::delete('/formtest/{id}', function ($id) {
-    Post::findOrFail($id)->delete();
-
-    return redirect('/formtest');
-});
-
-Route::get('/delete', function(){
-    Post::truncate();  
-
-    return redirect('/formtest');
-});
-
-
-//index
-Route::get('/posts', function(){
-    $posts = Post::all();
-
-    return view('posts.index', [
-        'posts' => $posts,
-    ]);
-});
-
-//show
-Route::get('/posts/{post}', function (Post $post) {
-    return view('posts.show', [
-        'post' => $post,
-    ]);
-});
-
-//edit
-Route::get('/posts/{post}/edit', function (Post $post) {
-    return view('posts.edit', [
-        'post' => $post,
-    ]);
-}
-);
-
-//update
-Route::patch('/posts/{post}', function (Post $post) {
-    $post->update([
-        'description' => request('description'),
-        'updated_at' => now(),
+Route::post('/register', function (Request $request) {
+    $data = $request->validate([
+        'first_name' => 'required|string|max:255',
+        'middle_name' => 'nullable|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'nickname' => 'nullable|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'age' => 'required|integer|min:1',
+        'address' => 'required|string',
+        'contact_number' => 'required|string',
+        'password' => 'required|string|min:8|confirmed',
     ]);
 
-    return redirect('/posts' . '/' . $post->id);
-}
-);
+    // Fill the default 'name' field for compatibility
+    $data['name'] = $data['first_name'] . ' ' . $data['last_name'];
+    $data['password'] = bcrypt($data['password']);
+
+    User::create($data);
+
+    return redirect()->route('dashboard')->with('success', 'User registered successfully!');
+})->name('users.store');
+
+Route::get('/dashboard', function () {
+    $users = User::all();
+    return view('dashboard', compact('users'));
+})->name('dashboard');
+
+Route::delete('/users/{user}', function (User $user) {
+    $user->delete();
+    return back()->with('success', 'User deleted successfully.');
+})->name('users.destroy');
+
+// Edit and Update routes could be added here as well for full CRUD
