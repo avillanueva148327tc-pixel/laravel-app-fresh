@@ -1,11 +1,16 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// --- Book Management System ---
+Route::redirect('/', '/books');
+Route::resource('books', BookController::class);
+
 // --- Phase 1: Navigation ---
-Route::view('/', 'welcome')->name('home');
+Route::view('/home', 'welcome')->name('home');
 Route::view('/about', 'about')->name('about');
 Route::view('/contact', 'contact')->name('contact');
 Route::view('/services', 'services')->name('services');
@@ -30,8 +35,7 @@ Route::post('/register', function (Request $request) {
         'password' => 'required|string|min:8|confirmed',
     ]);
 
-    // Fill the default 'name' field for compatibility
-    $data['name'] = $data['first_name'] . ' ' . $data['last_name'];
+    // Remove the 'name' field assignment as it doesn't exist in the current schema
     $data['password'] = bcrypt($data['password']);
 
     User::create($data);

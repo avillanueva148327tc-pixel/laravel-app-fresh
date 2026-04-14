@@ -1,27 +1,24 @@
 <header class="sticky top-4 z-50 px-4">
     <nav class="max-w-7xl mx-auto glass rounded-2xl px-6 py-4 flex items-center justify-between shadow-2xl">
         <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center font-bold text-white">L</div>
-            <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">Laravel App</span>
+            <div class="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">B</div>
+            <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">BookMaster</span>
         </div>
         
         <div class="hidden md:flex items-center space-x-1">
             @php
                 $links = [
-                    '/' => 'Home',
-                    '/about' => 'About',
-                    '/contact' => 'Contact',
-                    '/services' => 'Services',
-                    '/showcases' => 'Showcases',
-                    '/blog' => 'Blog',
+                    '/books' => 'Library',
+                    '/books/create' => 'Add Book',
+                    '/home' => 'Legacy Home',
                     '/register' => 'Register',
-                    '/dashboard' => 'Dashboard',
+                    '/dashboard' => 'Users',
                 ];
             @endphp
 
             @foreach($links as $url => $label)
                 <a href="{{ $url }}" 
-                   class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:bg-white/10 hover:text-indigo-400 {{ request()->is(trim($url, '/')) || (request()->is('/') && $url == '/') ? 'bg-white/10 text-indigo-400' : 'text-gray-300' }}">
+                   class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:bg-white/10 hover:text-indigo-400 {{ request()->is(trim($url, '/').'*') || (request()->is('/') && $url == '/books') ? 'bg-white/10 text-indigo-400' : 'text-gray-300' }}">
                     {{ $label }}
                 </a>
             @endforeach
